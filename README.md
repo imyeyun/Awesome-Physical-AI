@@ -3,13 +3,13 @@
 > 🤖 Physical AI (Robotics & Embodied AI) 분야의 오픈소스 모델과 데이터셋을 체계적으로 정리한 큐레이션 리스트.
 > A curated list of open-source models and datasets for Physical AI (Robotics & Embodied AI).
 
-[![Models](https://img.shields.io/badge/Models-15-blue)](https://pytorchkr.github.io/Awesome-Physical-AI)
-[![Datasets](https://img.shields.io/badge/Datasets-10-green)](https://pytorchkr.github.io/Awesome-Physical-AI)
-[![Organizations](https://img.shields.io/badge/Organizations-21-orange)](https://pytorchkr.github.io/Awesome-Physical-AI)
-[![Updated](https://img.shields.io/badge/Updated-2026-04-12-lightgrey)](https://github.com/PyTorchKR/Awesome-Physical-AI)
-[![Dashboard](https://img.shields.io/badge/🌐_Dashboard-Live-brightgreen)](https://pytorchkr.github.io/Awesome-Physical-AI)
+[![Models](https://img.shields.io/badge/Models-15-blue)](https://pytorchkorea.github.io/Awesome-Physical-AI)
+[![Datasets](https://img.shields.io/badge/Datasets-10-green)](https://pytorchkorea.github.io/Awesome-Physical-AI)
+[![Organizations](https://img.shields.io/badge/Organizations-21-orange)](https://pytorchkorea.github.io/Awesome-Physical-AI)
+[![Updated](https://img.shields.io/badge/Updated-2026-04-12-lightgrey)](https://github.com/PyTorchKorea/Awesome-Physical-AI)
+[![Dashboard](https://img.shields.io/badge/🌐_Dashboard-Live-brightgreen)](https://pytorchkorea.github.io/Awesome-Physical-AI)
 
-> **[👉 인터랙티브 대시보드에서 필터링 및 시각화 보기 | View Interactive Dashboard](https://pytorchkr.github.io/Awesome-Physical-AI)**
+> **[👉 인터랙티브 대시보드에서 필터링 및 시각화 보기 | View Interactive Dashboard](https://pytorchkorea.github.io/Awesome-Physical-AI)**
 
 ---
 
@@ -70,8 +70,8 @@
 새 모델 또는 데이터셋을 추가하려면 GitHub Issue를 열어주세요.
 To add a new model or dataset, please open a GitHub Issue:
 
-- **[➕ Add a Model](https://github.com/PyTorchKR/Awesome-Physical-AI/issues/new?template=add-model.yml)**
-- **[➕ Add a Dataset](https://github.com/PyTorchKR/Awesome-Physical-AI/issues/new?template=add-dataset.yml)**
+- **[➕ Add a Model](https://github.com/PyTorchKorea/Awesome-Physical-AI/issues/new?template=add-model.yml)**
+- **[➕ Add a Dataset](https://github.com/PyTorchKorea/Awesome-Physical-AI/issues/new?template=add-dataset.yml)**
 
 이슈가 등록되면 봇이 자동으로 PR을 생성하고, 관리자가 검토 후 머지합니다.
 A bot will automatically create a PR from your issue for admin review.
