@@ -215,14 +215,28 @@ def main() -> None:
     README_PATH.write_text(readme_content, encoding="utf-8")
     print(f"✅ README.md written ({len(models)} models, {len(datasets)} datasets)")
 
-    # Write docs/data.json
+    # Write docs/data.json (kept for reference / API use)
     DOCS_DIR.mkdir(exist_ok=True)
     data_json = generate_data_json(models, datasets)
+    json_str = json.dumps(data_json, ensure_ascii=False)
     (DOCS_DIR / "data.json").write_text(
-        json.dumps(data_json, ensure_ascii=False, indent=2),
-        encoding="utf-8",
+        json.dumps(data_json, ensure_ascii=False, indent=2), encoding="utf-8"
     )
-    print(f"✅ docs/data.json written")
+    print("✅ docs/data.json written")
+
+    # Embed data directly into index.html (works on file:// and GitHub Pages)
+    index_path = DOCS_DIR / "index.html"
+    if index_path.exists():
+        html = index_path.read_text(encoding="utf-8")
+        import re as _re
+        html = _re.sub(
+            r'<script id="embedded-data">.*?</script>',
+            f'<script id="embedded-data">window.__PHYSICAL_AI_DATA__ = {json_str};</script>',
+            html,
+            flags=_re.DOTALL,
+        )
+        index_path.write_text(html, encoding="utf-8")
+        print("✅ docs/index.html data embedded")
 
 
 if __name__ == "__main__":
