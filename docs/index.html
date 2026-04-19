@@ -602,24 +602,29 @@ function app() {
       const isDark = this.darkMode;
       const gridColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)';
       const labelColor = isDark ? '#9ca3af' : '#6b7280';
+      const accent = this.activeTab === 'datasets' ? '#22c55e' : '#6366f1';
+
+      // 탭에 따라 표시할 데이터 선택
+      const items = this.activeTab === 'datasets' ? this.datasets : this.models;
 
       // --- Timeline chart ---
-      const allItems = [...this.models, ...this.datasets];
       const yearCounts = {};
-      allItems.forEach(i => { yearCounts[i.year] = (yearCounts[i.year] || 0) + 1; });
+      items.forEach(i => { yearCounts[i.year] = (yearCounts[i.year] || 0) + 1; });
       const years = Object.keys(yearCounts).sort();
       const counts = years.map(y => yearCounts[y]);
 
-      const tlCtx = document.getElementById('timelineChart').getContext('2d');
-      if (this.timelineChart) this.timelineChart.destroy();
-      this.timelineChart = new Chart(tlCtx, {
+      // Chart.js 4.x 권장: getChart()으로 기존 인스턴스 안전하게 제거
+      const tlCanvas = document.getElementById('timelineChart');
+      const existingTl = Chart.getChart(tlCanvas);
+      if (existingTl) existingTl.destroy();
+      new Chart(tlCanvas, {
         type: 'bar',
         data: {
           labels: years,
           datasets: [{
             data: counts,
-            backgroundColor: '#6366f1cc',
-            borderColor: '#6366f1',
+            backgroundColor: accent + 'cc',
+            borderColor: accent,
             borderWidth: 1,
             borderRadius: 4,
           }]
@@ -636,14 +641,15 @@ function app() {
 
       // --- Category donut ---
       const catCounts = {};
-      allItems.forEach(i => (i.categories || []).forEach(c => { catCounts[c] = (catCounts[c] || 0) + 1; }));
+      items.forEach(i => (i.categories || []).forEach(c => { catCounts[c] = (catCounts[c] || 0) + 1; }));
       const cats = Object.keys(catCounts).sort((a, b) => catCounts[b] - catCounts[a]);
       const catValues = cats.map(c => catCounts[c]);
       const palette = ['#6366f1','#a855f7','#ec4899','#f97316','#eab308','#22c55e','#14b8a6','#3b82f6'];
 
-      const catCtx = document.getElementById('categoryChart').getContext('2d');
-      if (this.categoryChart) this.categoryChart.destroy();
-      this.categoryChart = new Chart(catCtx, {
+      const catCanvas = document.getElementById('categoryChart');
+      const existingCat = Chart.getChart(catCanvas);
+      if (existingCat) existingCat.destroy();
+      new Chart(catCanvas, {
         type: 'doughnut',
         data: {
           labels: cats,
@@ -663,12 +669,6 @@ function app() {
           }
         }
       });
-    },
-
-    updateCharts() {
-      if (this.timelineChart) this.timelineChart.destroy();
-      if (this.categoryChart) this.categoryChart.destroy();
-      this.buildCharts();
     },
 
     // ── Init ──
