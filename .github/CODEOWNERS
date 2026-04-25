@@ -1,0 +1,18 @@
+# CODEOWNERS — 파일별 필수 리뷰어 지정
+# 변경 사항은 아래 지정된 담당자의 승인 없이 머지될 수 없습니다.
+# Changes cannot be merged without approval from the designated owners below.
+#
+# 형식: <파일 패턴>  <GitHub 사용자명>
+# Format: <file pattern>  <GitHub username>
+
+# 기본 담당자 (모든 파일)
+# Default owner for everything
+*                   @jiho
+
+# 데이터 파일 — 반드시 관리자 검토 필요
+# Data files — always require maintainer review
+data/               @jiho
+
+# 스크립트 / CI 워크플로우
+scripts/            @jiho
+.github/            @jiho

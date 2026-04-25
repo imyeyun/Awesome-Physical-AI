@@ -16,6 +16,13 @@ import yaml
 ROOT = Path(__file__).parent.parent
 DATA_DIR = ROOT / "data"
 
+VALID_TOOL_TYPES = {"physics_engine", "rl_framework", "benchmark", "full_stack"}
+
+REQUIRED_TOOL_KEYS = {
+    "id", "name", "org", "year", "description_en", "description_ko",
+    "type", "added_date",
+}
+
 VALID_CATEGORIES = {
     "manipulation", "locomotion", "navigation", "dexterous",
     "whole-body", "aerial", "underwater",
@@ -108,6 +115,27 @@ def validate_dataset(entry: dict) -> None:
         err(f"[{entry_id}] Must have at least one of: github_url, paper_url, hf_url")
 
 
+def validate_tool(entry: dict) -> None:
+    entry_id = entry.get("id", "<no-id>")
+    print(f"  Checking tool: {entry_id}")
+
+    for key in REQUIRED_TOOL_KEYS:
+        if key not in entry:
+            err(f"[{entry_id}] Missing required field: '{key}'")
+
+    year = entry.get("year")
+    if year and not (2010 <= int(year) <= 2030):
+        err(f"[{entry_id}] 'year' {year} looks wrong")
+
+    tool_type = entry.get("type")
+    if tool_type and tool_type not in VALID_TOOL_TYPES:
+        err(f"[{entry_id}] 'type' has unknown value '{tool_type}' (valid: {sorted(VALID_TOOL_TYPES)})")
+
+    urls = [entry.get("github_url"), entry.get("paper_url"), entry.get("project_url")]
+    if not any(urls):
+        err(f"[{entry_id}] Must have at least one of: github_url, paper_url, project_url")
+
+
 def check_unique_ids(entries: list[dict], kind: str) -> None:
     seen: set[str] = set()
     for e in entries:
@@ -140,6 +168,18 @@ def main() -> int:
     else:
         err("data/datasets.yaml not found")
 
+    print("\n=== Validating data/tools.yaml ===")
+    tools_path = DATA_DIR / "tools.yaml"
+    tools: list[dict] = []
+    if tools_path.exists():
+        with open(tools_path, encoding="utf-8") as f:
+            tools = yaml.safe_load(f) or []
+        check_unique_ids(tools, "tools")
+        for t in tools:
+            validate_tool(t)
+    else:
+        print("  (skipping — data/tools.yaml not found)")
+
     print()
     if errors:
         print(f"❌ Validation failed with {len(errors)} error(s):")
@@ -147,7 +187,7 @@ def main() -> int:
             print(f"   • {e}")
         return 1
     else:
-        print(f"✅ All entries valid ({len(models)} models, {len(datasets)} datasets)")
+        print(f"✅ All entries valid ({len(models)} models, {len(datasets)} datasets, {len(tools)} tools)")
         return 0
 
 
