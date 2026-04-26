@@ -44,8 +44,8 @@
 ---
 
 ## 📋 TODO — 데이터 확충
-
-- [ ] 모델 추가 (우선순위 높음)
+@ 심기택
+- [ ] 모델 추가 (우선순위 높음) 
   - [ ] RoboVLMs, CogACT, RoboMamba 등 2025년 신규 모델
   - [ ] Unitree / Fourier / Agility 등 하드웨어 업체 오픈소스
   - [ ] IsaacGym / MuJoCo Playground 등 시뮬레이터
@@ -60,7 +60,7 @@
 
 ## 📋 TODO — 고도화
 
-### A. 데이터 자동 수집 (난이도: 중)
+### A. 데이터 자동 수집 (난이도: 중) @정인호 
 - [ ] `scripts/discover_new.py` 추가
 - [ ] arXiv `cs.RO` 카테고리 주간 신규 논문 감지
 - [ ] HuggingFace `robotics` 태그 신규 모델 감지
