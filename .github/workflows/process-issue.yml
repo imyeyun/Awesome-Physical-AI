@@ -54,21 +54,25 @@ jobs:
       - name: Create branch and pull request
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
         run: |
-          BRANCH="add-entry/issue-${{ github.event.issue.number }}"
+          BRANCH="add-entry/issue-${ISSUE_NUMBER}"
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$BRANCH"
           git add data/ docs/data.json docs/index.html README.md
-          git commit -m "feat: add entry from issue #${{ github.event.issue.number }}"
+          git commit -m "feat: add entry from issue #${ISSUE_NUMBER}"
           git push origin "$BRANCH"
+          PR_BODY="Resolves #${ISSUE_NUMBER}
+
+Auto-generated from issue by @${ISSUE_AUTHOR}.
+
+**Please review the entry before merging.**"
           gh pr create \
-            --title "Add entry: ${{ github.event.issue.title }}" \
-            --body "Resolves #${{ github.event.issue.number }}
-
-Auto-generated from issue by @${{ github.event.issue.user.login }}.
-
-**Please review the entry before merging.**" \
+            --title "Add entry: ${ISSUE_TITLE}" \
+            --body "$PR_BODY" \
             --head "$BRANCH" \
             --base main \
             --label "review-needed"
@@ -76,8 +80,9 @@ Auto-generated from issue by @${{ github.event.issue.user.login }}.
       - name: Comment on issue
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
-          gh issue comment ${{ github.event.issue.number }} \
+          gh issue comment "${ISSUE_NUMBER}" \
             --body "✅ 감사합니다! PR이 자동으로 생성되었습니다. 관리자 검토 후 머지됩니다.
 
 Thanks! A PR has been automatically created from this issue and is pending admin review."
