@@ -65,11 +65,7 @@ jobs:
           git add data/ docs/data.json docs/index.html README.md
           git commit -m "feat: add entry from issue #${ISSUE_NUMBER}"
           git push origin "$BRANCH"
-          PR_BODY="Resolves #${ISSUE_NUMBER}
-
-Auto-generated from issue by @${ISSUE_AUTHOR}.
-
-**Please review the entry before merging.**"
+          PR_BODY=$(printf 'Resolves #%s\n\nAuto-generated from issue by @%s.\n\n**Please review the entry before merging.**' "${ISSUE_NUMBER}" "${ISSUE_AUTHOR}")
           gh pr create \
             --title "Add entry: ${ISSUE_TITLE}" \
             --body "$PR_BODY" \
@@ -82,7 +78,5 @@ Auto-generated from issue by @${ISSUE_AUTHOR}.
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
-          gh issue comment "${ISSUE_NUMBER}" \
-            --body "✅ 감사합니다! PR이 자동으로 생성되었습니다. 관리자 검토 후 머지됩니다.
-
-Thanks! A PR has been automatically created from this issue and is pending admin review."
+          COMMENT=$(printf '✅ 감사합니다! PR이 자동으로 생성되었습니다. 관리자 검토 후 머지됩니다.\n\nThanks! A PR has been automatically created from this issue and is pending admin review.')
+          gh issue comment "${ISSUE_NUMBER}" --body "$COMMENT"
