@@ -11,10 +11,10 @@ permissions:
 
 jobs:
   process:
-    # Only run for issues using our "Add Model" or "Add Dataset" templates
     if: |
       contains(github.event.issue.labels.*.name, 'add-model') ||
-      contains(github.event.issue.labels.*.name, 'add-dataset')
+      contains(github.event.issue.labels.*.name, 'add-dataset') ||
+      contains(github.event.issue.labels.*.name, 'add-simulator')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,8 +34,10 @@ jobs:
           LABELS='${{ toJson(github.event.issue.labels.*.name) }}'
           if echo "$LABELS" | grep -q "add-model"; then
             echo "issue_type=model" >> $GITHUB_OUTPUT
-          else
+          elif echo "$LABELS" | grep -q "add-dataset"; then
             echo "issue_type=dataset" >> $GITHUB_OUTPUT
+          else
+            echo "issue_type=tool" >> $GITHUB_OUTPUT
           fi
 
       - name: Parse issue and append entry
@@ -57,7 +59,7 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$BRANCH"
-          git add data/ docs/data.json README.md
+          git add data/ docs/data.json docs/index.html README.md
           git commit -m "feat: add entry from issue #${{ github.event.issue.number }}"
           git push origin "$BRANCH"
           gh pr create \
