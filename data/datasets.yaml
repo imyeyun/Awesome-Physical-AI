@@ -350,7 +350,7 @@
     strategies. 7,500 demonstrations covering 38 tasks with semantic augmentation.
   description_ko: 로봇 조작 전략의 확장 가능하고 데이터 효율적인 학습을 위한 데이터셋. 의미론적 증강으로 38개 태스크에 걸쳐 7,500개의
     시연.
-  github_url: https://github.com/rail-berkeley/roboagent
+  github_url: https://github.com/robopen/roboagent
   paper_url: https://arxiv.org/abs/2309.01918
   hf_url: ''
   project_url: https://robopen.github.io
