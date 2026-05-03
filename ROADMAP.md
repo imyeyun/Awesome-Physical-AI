@@ -1,6 +1,6 @@
 # Awesome Physical AI — Roadmap & Progress
 
-> 최종 업데이트: 2026-04-19
+> 최종 업데이트: 2026-05-03
 
 ---
 
@@ -37,9 +37,13 @@
 
 ## 🔧 알려진 이슈 / 즉시 해결 필요
 
-- [ ] `process-issue.yml` 동작을 위해 GitHub 레포에 라벨 `add-model`, `add-dataset` 수동 생성 필요
+- [x] `process-issue.yml` 동작을 위해 GitHub 레포에 라벨 `add-model`, `add-dataset` 수동 생성 필요
 - [ ] 차트 렌더링 수정 후 실제 GitHub Pages에서 동작 확인 필요
 - [ ] `process_issue.py`의 체크박스 파싱 로직 실제 이슈 폼으로 테스트 필요
+- [x] 모델/데이터/시뮬레이터 추가해도 자동으로 PR 안 생기는 문제 해결
+- [x] HuggingFace Read 권한 토큰 추가해서 모델 정보 접근 불가 문제 해결
+- [x] roboagent 데이터셋 깃허브(코드) 링크 접속 불가 문제 해결 및 추후 링크 접속 불가 문제 발생 시 이슈 자동 생성 
+
 
 ---
 
@@ -70,7 +74,7 @@
 - [ ] 대시보드에서 모델 2~3개 선택 → 스펙 나란히 비교하는 뷰
 - [ ] GitHub 스타, 하드웨어 타겟, 학습 방식 등 비교 테이블
 
-### C. 필터 URL 파라미터화 (난이도: 하)
+### C. 필터 URL 파라미터화 (난이도: 하) @강정민
 - [ ] 필터 상태를 URL 쿼리스트링에 반영
 - [ ] 예: `?tab=models&category=manipulation&hardware=humanoid`
 - [ ] SNS·슬랙에서 특정 필터 결과를 바로 공유 가능
