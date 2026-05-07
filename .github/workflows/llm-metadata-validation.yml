@@ -1,0 +1,61 @@
+name: LLM Metadata Validation
+
+on:
+  pull_request:
+    paths:
+      - "data/**"
+      - "scripts/validate_llm_metadata.py"
+      - "tests/test_validate_llm_metadata.py"
+      - ".github/workflows/llm-metadata-validation.yml"
+  schedule:
+    - cron: "0 2 * * 1"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Validation mode"
+        required: false
+        default: "report"
+        type: choice
+        options:
+          - report
+          - strict
+
+jobs:
+  validate-llm-metadata:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      VALIDATION_MODE: ${{ inputs.mode || 'report' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run LLM metadata validation
+        run: >
+          python scripts/validate_llm_metadata.py
+          --mode "${VALIDATION_MODE}"
+          --output reports/llm_validation_report.json
+          --summary-output reports/llm_validation_summary.md
+
+      - name: Publish Actions summary
+        if: always()
+        run: cat reports/llm_validation_summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload validation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: llm-validation-report
+          path: |
+            reports/llm_validation_report.json
+            reports/llm_validation_summary.md
