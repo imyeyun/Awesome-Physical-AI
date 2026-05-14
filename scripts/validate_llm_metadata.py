@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-LLM-based validation for submitted tags and English summaries.
+LLM-based validation for submitted tags and summaries.
 
 This script compares repository metadata against README and paper abstract
 evidence, asks Gemini for a structured JSON verdict, then writes a report
@@ -80,6 +80,7 @@ class ValidationResult:
     name: str
     tags: list[str]
     summary: str
+    summary_ko: str
     tag_score: float
     summary_score: float
     final_verdict: str
@@ -383,20 +384,21 @@ def build_prompt(entry_type: str, entry: dict[str, Any], evidence: EvidenceBundl
 당신은 Awesome Physical AI 저장소에 등록된 항목의 메타데이터를 검증하는 엄격한 검수자입니다.
 
 검증 목표:
-사용자가 제출한 태그와 영어 요약문이 GitHub README 및 논문 Abstract 근거에 비추어 적절한지 판단하세요.
+사용자가 제출한 태그, 영어 요약문, 한국어 요약문이 GitHub README 및 논문 Abstract 근거에 비추어 적절한지 판단하세요.
 
 반드시 지켜야 할 기준:
 1. 제공된 README evidence와 Abstract evidence만 근거로 사용하세요.
 2. 외부 지식이나 일반적인 추측을 사용하지 마세요.
 3. 태그가 그럴듯해 보여도 README 또는 Abstract에서 뒷받침되지 않으면 unsupported_tags에 포함하세요.
-4. 요약문에 README 또는 Abstract에서 확인되지 않는 주장, 과장된 표현, 잘못된 적용 분야, 잘못된 성능 주장, 잘못된 모델 설명이 있으면 unsupported_claims에 포함하세요.
+4. 영어/한국어 요약문에 README 또는 Abstract에서 확인되지 않는 주장, 과장된 표현, 잘못된 적용 분야, 잘못된 성능 주장, 잘못된 모델 설명이 있으면 unsupported_claims에 포함하세요.
 5. README는 구현 방식, 프레임워크, 설치/사용법, 코드 기반 기능을 판단할 때 우선 근거로 사용하세요.
 6. 논문 Abstract는 연구 목적, 핵심 기여, 적용 도메인, 제안 방법, 실험 대상 등을 판단할 때 우선 근거로 사용하세요.
 7. README 또는 Abstract가 누락되었거나 근거가 약한 경우, 명확히 틀린 주장이 아니라면 fail보다 warning을 우선 사용하세요.
 8. 명확히 근거와 모순되는 태그나 요약문 주장이 있으면 fail을 사용할 수 있습니다.
 9. tag_score와 summary_score는 0.0 이상 1.0 이하의 숫자로 작성하세요.
 10. final_verdict는 반드시 pass, warning, fail 중 하나만 사용하세요.
-11. 응답은 설명 문장 없이 JSON만 반환하세요.
+11. reason은 반드시 한국어로 작성하세요.
+12. 응답은 설명 문장 없이 JSON만 반환하세요.
 
 판정 기준:
 - pass: 태그와 요약문이 README 및 Abstract 근거로 충분히 뒷받침됨
@@ -412,6 +414,7 @@ def build_prompt(entry_type: str, entry: dict[str, Any], evidence: EvidenceBundl
 - Entry name: {entry.get("name", "")}
 - Submitted tags: {json.dumps(entry.get("tags", []), ensure_ascii=False)}
 - Submitted English summary: {entry.get("description_en", "")}
+- Submitted Korean summary: {entry.get("description_ko", "")}
 
 README evidence:
 {evidence.readme_text or "(missing)"}
@@ -450,6 +453,7 @@ def validate_entry(
             name=entry.get("name", ""),
             tags=entry.get("tags", []),
             summary=entry.get("description_en", ""),
+            summary_ko=entry.get("description_ko", ""),
             tag_score=0.0,
             summary_score=0.0,
             final_verdict="warning",
@@ -467,6 +471,7 @@ def validate_entry(
         name=entry.get("name", ""),
         tags=entry.get("tags", []),
         summary=entry.get("description_en", ""),
+        summary_ko=entry.get("description_ko", ""),
         tag_score=llm_result["tag_score"],
         summary_score=llm_result["summary_score"],
         final_verdict=llm_result["final_verdict"],
@@ -551,15 +556,25 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--output", type=Path, default=DEFAULT_REPORT_PATH)
     parser.add_argument("--summary-output", type=Path, default=DEFAULT_SUMMARY_PATH)
     parser.add_argument("--mock-response-file", type=Path, default=None)
+    parser.add_argument(
+        "--entry-ids",
+        type=str,
+        default="",
+        help="Comma-separated entry IDs to validate. Empty means validate all entries.",
+    )
     return parser.parse_args(argv)
 
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    requested_ids = {item.strip() for item in args.entry_ids.split(",") if item.strip()}
     entries = [
         (entry_type, entry)
         for entry_type, entry in iter_entries()
-        if entry.get("tags") or entry.get("description_en")
+        if (
+            (entry.get("tags") or entry.get("description_en") or entry.get("description_ko"))
+            and (not requested_ids or entry.get("id", "") in requested_ids)
+        )
     ]
 
     fetcher = EvidenceFetcher()
