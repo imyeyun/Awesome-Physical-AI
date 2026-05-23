@@ -25,4 +25,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh workflow run test.yml --ref "${{ steps.pr.outputs.branch }}"
+          gh workflow run test.yml --ref "${{ steps.pr.outputs.branch }}" --repo ${{ github.repository }}
