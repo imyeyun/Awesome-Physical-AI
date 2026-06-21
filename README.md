@@ -7,7 +7,7 @@
 [![Datasets](https://img.shields.io/badge/Datasets-10-green)](https://pytorchkorea.github.io/Awesome-Physical-AI)
 [![Simulators](https://img.shields.io/badge/Simulators-9-purple)](https://pytorchkorea.github.io/Awesome-Physical-AI)
 [![Organizations](https://img.shields.io/badge/Organizations-28-orange)](https://pytorchkorea.github.io/Awesome-Physical-AI)
-[![Updated](https://img.shields.io/badge/Updated-2026-06-14-lightgrey)](https://github.com/PyTorchKorea/Awesome-Physical-AI)
+[![Updated](https://img.shields.io/badge/Updated-2026-06-21-lightgrey)](https://github.com/PyTorchKorea/Awesome-Physical-AI)
 [![Dashboard](https://img.shields.io/badge/🌐_Dashboard-Live-brightgreen)](https://pytorchkorea.github.io/Awesome-Physical-AI)
 
 > **[👉 인터랙티브 대시보드에서 필터링 및 시각화 보기 | View Interactive Dashboard](https://pytorchkorea.github.io/Awesome-Physical-AI)**
@@ -107,7 +107,7 @@ A bot will automatically create a PR from your issue for admin review.
 | `hardware` | `manipulator` · `humanoid` · `quadruped` · `biped` · `mobile` · `drone` · `hand` |
 | `learning` | `VLA` · `IL` · `RL` · `diffusion` · `world_model` · `sim2real` |
 | `framework` | `pytorch` · `jax` · `tensorflow` |
-| `communication` | `ros2` · `grpc` · `lcm` · `zenoh` |
+| `communication` | `ros2` · `grpc` · `lcm` · `zenoh` · `other` |
 
 ### Datasets
 
