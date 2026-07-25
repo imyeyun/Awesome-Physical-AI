@@ -42,7 +42,7 @@
 
 수정 폼의 동작 방식은 다음과 같습니다.
 
-- 맨 위 드롭다운에서 수정할 항목을 고릅니다. 목록은 `data/` 변경 시 자동으로 갱신됩니다.
+- 맨 위 드롭다운에서 수정할 항목을 고릅니다. 목록은 항목이 추가되는 PR에서 자동으로 갱신됩니다.
 - **바꿀 값만** 채우면 됩니다. 비워 둔 항목은 기존 값이 그대로 유지됩니다.
 - 체크박스 그룹(`categories`, `hardware` 등)은 **하나라도 체크하면 그 그룹 전체가 교체**되고, 아무것도 체크하지 않으면 유지됩니다.
 - `stats`, `added_date` 등 자동 관리 필드는 수정되지 않습니다.
@@ -66,6 +66,7 @@ pip install -r requirements.txt
 python scripts/validate_data.py   # YAML 스키마 검증
 python -m pytest tests/ -v        # 단위 테스트
 python scripts/generate_site.py   # README / docs/ 재생성 확인
+python scripts/sync_edit_templates.py  # 수정 폼 드롭다운 갱신
 ```
 
 ---
@@ -94,7 +95,7 @@ python scripts/generate_site.py   # README / docs/ 재생성 확인
 | 주간 스타수 업데이트 | `scripts/update_stats.py` |
 | YAML 스키마 검증 규칙 | `scripts/validate_data.py` |
 | 이슈 → PR 자동화 | `scripts/process_issue.py`, `.github/workflows/process-issue.yml` |
-| 수정 폼 ID 드롭다운 동기화 | `scripts/sync_edit_templates.py`, `.github/workflows/sync-edit-dropdowns.yml` |
+| 수정 폼 ID 드롭다운 동기화 | `scripts/sync_edit_templates.py` (봇 PR에서 자동 실행) |
 | CI 워크플로우 | `.github/workflows/` |
 
 #### 스타일 규칙
@@ -188,7 +189,7 @@ If information on an already-listed entry is wrong, use the edit templates:
 
 How an edit form behaves:
 
-- Pick the entry from the dropdown at the top. That list is regenerated automatically whenever `data/` changes.
+- Pick the entry from the dropdown at the top. That list is regenerated automatically in the PR that adds an entry.
 - Fill in **only the values that should change** — anything left blank keeps its current value.
 - For checkbox groups (`categories`, `hardware`, …), checking at least one box **replaces that entire list**; leaving a group untouched keeps it as is.
 - Automatically maintained fields such as `stats` and `added_date` are never touched.
@@ -212,6 +213,7 @@ pip install -r requirements.txt
 python scripts/validate_data.py   # YAML schema validation
 python -m pytest tests/ -v        # unit tests
 python scripts/generate_site.py   # verify README / docs/ output
+python scripts/sync_edit_templates.py  # refresh edit-form dropdowns
 ```
 
 ---
@@ -240,7 +242,7 @@ Feature contributions must follow the **Issue → Discussion → PR** flow.
 | Weekly stats update | `scripts/update_stats.py` |
 | YAML schema validation rules | `scripts/validate_data.py` |
 | Issue → PR automation | `scripts/process_issue.py`, `.github/workflows/process-issue.yml` |
-| Edit-form ID dropdown sync | `scripts/sync_edit_templates.py`, `.github/workflows/sync-edit-dropdowns.yml` |
+| Edit-form ID dropdown sync | `scripts/sync_edit_templates.py` (runs automatically in the bot's PR) |
 | CI workflows | `.github/workflows/` |
 
 #### Style rules

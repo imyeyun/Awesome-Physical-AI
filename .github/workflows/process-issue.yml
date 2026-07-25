@@ -62,6 +62,11 @@ jobs:
       - name: Regenerate site data
         run: python scripts/generate_site.py
 
+      # Keep the edit-* forms' ID dropdowns in step with the data, in this same
+      # PR — that way a new entry is immediately selectable for later fixes.
+      - name: Sync edit-form dropdowns
+        run: python scripts/sync_edit_templates.py
+
       - name: Create branch and pull request
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -83,7 +88,7 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$BRANCH"
-          git add data/ docs/data.json docs/index.html README.md
+          git add data/ docs/data.json docs/index.html README.md .github/ISSUE_TEMPLATE
           # Credit the issue author via a Co-authored-by trailer so they are counted
           # as a contributor once the PR is merged (survives squash merges too).
           git commit \

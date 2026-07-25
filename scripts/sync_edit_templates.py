@@ -15,8 +15,9 @@ Only the lines between the AUTOGEN markers are rewritten:
 
 Each option is rendered as "<id> — <name>"; process_issue.py keeps only the id.
 
-Run automatically by .github/workflows/sync-edit-dropdowns.yml whenever data/ changes
-on main. Also useful locally:
+Run automatically by .github/workflows/process-issue.yml, so a newly added entry is
+already selectable in the edit forms by the time its PR merges. Run it yourself when
+hand-editing data/ in a direct PR:
 
   python scripts/sync_edit_templates.py
 """
