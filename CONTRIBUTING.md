@@ -30,6 +30,25 @@
 
 이슈를 등록하면 봇이 자동으로 PR을 생성합니다. 관리자가 검토 후 머지합니다.
 
+#### 등록된 정보 수정
+
+이미 등록된 항목의 정보가 잘못되었다면 아래 수정 템플릿을 사용하세요.
+
+| 유형 | 이슈 템플릿 |
+|------|------------|
+| 모델 | [✏️ 모델 수정](https://github.com/PyTorchKR/Awesome-Physical-AI/issues/new?template=edit-model.yml) |
+| 데이터셋 | [✏️ 데이터셋 수정](https://github.com/PyTorchKR/Awesome-Physical-AI/issues/new?template=edit-dataset.yml) |
+| 시뮬레이터 | [✏️ 시뮬레이터 수정](https://github.com/PyTorchKR/Awesome-Physical-AI/issues/new?template=edit-simulator.yml) |
+
+수정 폼의 동작 방식은 다음과 같습니다.
+
+- 맨 위 드롭다운에서 수정할 항목을 고릅니다. 목록은 `data/` 변경 시 자동으로 갱신됩니다.
+- **바꿀 값만** 채우면 됩니다. 비워 둔 항목은 기존 값이 그대로 유지됩니다.
+- 체크박스 그룹(`categories`, `hardware` 등)은 **하나라도 체크하면 그 그룹 전체가 교체**되고, 아무것도 체크하지 않으면 유지됩니다.
+- `stats`, `added_date` 등 자동 관리 필드는 수정되지 않습니다.
+
+체크박스 그룹을 완전히 비우는 것은 지원하지 않습니다. 등록 시 필수인 그룹이 있어 항목이 깨질 수 있기 때문입니다. 필요한 경우 "Reason for edit"에 적어주시면 관리자가 PR에서 직접 처리합니다.
+
 #### 직접 PR 제출
 
 YAML 파일을 직접 수정해 PR을 제출할 수도 있습니다.
@@ -75,6 +94,7 @@ python scripts/generate_site.py   # README / docs/ 재생성 확인
 | 주간 스타수 업데이트 | `scripts/update_stats.py` |
 | YAML 스키마 검증 규칙 | `scripts/validate_data.py` |
 | 이슈 → PR 자동화 | `scripts/process_issue.py`, `.github/workflows/process-issue.yml` |
+| 수정 폼 ID 드롭다운 동기화 | `scripts/sync_edit_templates.py`, `.github/workflows/sync-edit-dropdowns.yml` |
 | CI 워크플로우 | `.github/workflows/` |
 
 #### 스타일 규칙
@@ -105,10 +125,10 @@ YAML 파일 작성 시 아래 유효값만 사용해야 합니다.
 
 | 필드 | 유효값 |
 |------|--------|
-| `categories` | `manipulation` · `locomotion` · `navigation` · `dexterous` · `whole-body` · `aerial` |
-| `hardware` | `manipulator` · `humanoid` · `quadruped` · `biped` · `mobile` · `drone` · `hand` |
-| `learning` | `VLA` · `IL` · `RL` · `diffusion` · `world_model` · `sim2real` |
-| `framework` | `pytorch` · `jax` · `tensorflow` |
+| `categories` | `manipulation` · `locomotion` · `navigation` · `dexterous` · `whole-body` · `aerial` · `underwater` |
+| `hardware` | `manipulator` · `humanoid` · `quadruped` · `biped` · `mobile` · `drone` · `underwater` · `hand` |
+| `learning` | `VLA` · `IL` · `RL` · `diffusion` · `world_model` · `sim2real` · `meta-learning` · `self-supervised` |
+| `framework` | `pytorch` · `jax` · `tensorflow` · `mujoco` · `isaacgym` · `other` |
 | `communication` | `ros2` · `grpc` · `lcm` · `zenoh` · `other` |
 
 **데이터셋**
@@ -156,6 +176,25 @@ There are two types of contributions:
 
 A bot will automatically open a PR from your issue. Maintainers will review and merge.
 
+#### Fixing an existing entry
+
+If information on an already-listed entry is wrong, use the edit templates:
+
+| Type | Template |
+|------|----------|
+| Model | [✏️ Edit a Model](https://github.com/PyTorchKR/Awesome-Physical-AI/issues/new?template=edit-model.yml) |
+| Dataset | [✏️ Edit a Dataset](https://github.com/PyTorchKR/Awesome-Physical-AI/issues/new?template=edit-dataset.yml) |
+| Simulator | [✏️ Edit a Simulator](https://github.com/PyTorchKR/Awesome-Physical-AI/issues/new?template=edit-simulator.yml) |
+
+How an edit form behaves:
+
+- Pick the entry from the dropdown at the top. That list is regenerated automatically whenever `data/` changes.
+- Fill in **only the values that should change** — anything left blank keeps its current value.
+- For checkbox groups (`categories`, `hardware`, …), checking at least one box **replaces that entire list**; leaving a group untouched keeps it as is.
+- Automatically maintained fields such as `stats` and `added_date` are never touched.
+
+Emptying a checkbox group is not supported, since some groups are required at submission time and clearing one would break the entry. Mention it under "Reason for edit" and a maintainer will handle it in the PR.
+
 #### Direct PR
 
 You can also edit the YAML files directly and submit a PR.
@@ -201,6 +240,7 @@ Feature contributions must follow the **Issue → Discussion → PR** flow.
 | Weekly stats update | `scripts/update_stats.py` |
 | YAML schema validation rules | `scripts/validate_data.py` |
 | Issue → PR automation | `scripts/process_issue.py`, `.github/workflows/process-issue.yml` |
+| Edit-form ID dropdown sync | `scripts/sync_edit_templates.py`, `.github/workflows/sync-edit-dropdowns.yml` |
 | CI workflows | `.github/workflows/` |
 
 #### Style rules
@@ -232,10 +272,10 @@ Only the following values are valid in YAML files.
 
 | Field | Valid values |
 |-------|-------------|
-| `categories` | `manipulation` · `locomotion` · `navigation` · `dexterous` · `whole-body` · `aerial` |
-| `hardware` | `manipulator` · `humanoid` · `quadruped` · `biped` · `mobile` · `drone` · `hand` |
-| `learning` | `VLA` · `IL` · `RL` · `diffusion` · `world_model` · `sim2real` |
-| `framework` | `pytorch` · `jax` · `tensorflow` |
+| `categories` | `manipulation` · `locomotion` · `navigation` · `dexterous` · `whole-body` · `aerial` · `underwater` |
+| `hardware` | `manipulator` · `humanoid` · `quadruped` · `biped` · `mobile` · `drone` · `underwater` · `hand` |
+| `learning` | `VLA` · `IL` · `RL` · `diffusion` · `world_model` · `sim2real` · `meta-learning` · `self-supervised` |
+| `framework` | `pytorch` · `jax` · `tensorflow` · `mujoco` · `isaacgym` · `other` |
 | `communication` | `ros2` · `grpc` · `lcm` · `zenoh` · `other` |
 
 **Datasets**

@@ -1,0 +1,207 @@
+name: "Edit a Dataset"
+description: "Fix or update information for an already-listed dataset"
+title: "[Edit Dataset] "
+labels: ["edit-dataset"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 데이터셋 정보 수정 | Edit an Existing Dataset
+        등록된 데이터셋의 잘못된 정보를 수정합니다. 이슈 등록 후 봇이 자동으로 PR을 생성합니다.
+
+        Fix incorrect information for a listed dataset. A bot will create a PR automatically.
+
+  - type: dropdown
+    id: id
+    attributes:
+      label: "ID (slug)"
+      description: "수정할 데이터셋을 선택하세요 | Select the dataset you want to fix"
+      options:
+        # AUTOGEN:datasets:start
+        - "open-x-embodiment — Open X-Embodiment (OXE)"
+        - "droid — DROID"
+        - "bridgev2 — BridgeData V2"
+        - "rh20t — RH20T"
+        - "libero — LIBERO"
+        - "maniskill2 — ManiSkill2"
+        - "language-table — Language-Table"
+        - "humanoidbench — HumanoidBench"
+        - "metaworld — Meta-World"
+        - "roboagent — RoboAgent Dataset"
+        - "behavior-1k — BEHAVIOR-1K"
+        # AUTOGEN:datasets:end
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: "Reason for edit"
+      description: "무엇이 왜 잘못되었는지 설명해 주세요 | Explain what is wrong and why"
+      placeholder: "e.g. The trajectory count is off by an order of magnitude; the HF link moved."
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ### 수정할 값 | Updated values
+
+        **바꾸려는 항목만** 채워 주세요. 비워 둔 항목은 기존 값이 그대로 유지됩니다.
+        체크박스 그룹은 **하나라도 체크하면 그 그룹 전체가 체크한 값으로 교체**되고,
+        아무것도 체크하지 않으면 기존 값이 유지됩니다.
+
+        Fill in **only what should change** — anything left blank keeps its current value.
+        For checkbox groups, checking at least one box replaces that entire list.
+
+  - type: input
+    id: name
+    attributes:
+      label: "Name"
+      placeholder: "Corrected official dataset name"
+
+  - type: input
+    id: organization
+    attributes:
+      label: "Organization"
+      placeholder: "e.g. UC Berkeley"
+
+  - type: input
+    id: year
+    attributes:
+      label: "Year"
+      placeholder: "e.g. 2024"
+
+  - type: textarea
+    id: description_en
+    attributes:
+      label: "Description (English)"
+      placeholder: "Corrected 1-2 sentence description"
+
+  - type: textarea
+    id: description_ko
+    attributes:
+      label: "Description (Korean)"
+      placeholder: "수정된 1-2 문장 설명"
+
+  - type: input
+    id: github_url
+    attributes:
+      label: "GitHub URL"
+      placeholder: "https://github.com/org/repo"
+
+  - type: input
+    id: paper_url
+    attributes:
+      label: "Paper URL (arXiv)"
+      placeholder: "https://arxiv.org/abs/xxxx.xxxxx"
+
+  - type: input
+    id: huggingface_url
+    attributes:
+      label: "HuggingFace URL"
+      placeholder: "https://huggingface.co/datasets/org/name"
+
+  - type: input
+    id: project_page_url
+    attributes:
+      label: "Project Page URL"
+      placeholder: "https://mydataset.github.io"
+
+  - type: checkboxes
+    id: categories
+    attributes:
+      label: "Categories"
+      description: "체크하면 categories 전체를 교체 | Checking any box replaces the whole list"
+      options:
+        - label: "manipulation"
+        - label: "locomotion"
+        - label: "navigation"
+        - label: "dexterous"
+        - label: "whole-body"
+        - label: "aerial"
+        - label: "underwater"
+
+  - type: checkboxes
+    id: hardware_targets
+    attributes:
+      label: "Hardware Targets"
+      description: "체크하면 hardware 전체를 교체 | Checking any box replaces the whole list"
+      options:
+        - label: "manipulator"
+        - label: "humanoid"
+        - label: "quadruped"
+        - label: "biped"
+        - label: "mobile"
+        - label: "drone"
+        - label: "underwater"
+        - label: "hand"
+
+  - type: checkboxes
+    id: data_source
+    attributes:
+      label: "Data Source"
+      description: "체크하면 source 전체를 교체 | Checking any box replaces the whole list"
+      options:
+        - label: "real"
+        - label: "simulation"
+        - label: "teleoperation"
+        - label: "human_demo"
+        - label: "mocap"
+
+  - type: checkboxes
+    id: modality
+    attributes:
+      label: "Modality"
+      description: "체크하면 modality 전체를 교체 | Checking any box replaces the whole list"
+      options:
+        - label: "rgb"
+        - label: "rgbd"
+        - label: "depth"
+        - label: "lidar"
+        - label: "tactile"
+        - label: "proprioception"
+        - label: "audio"
+        - label: "force_torque"
+
+  - type: input
+    id: number_of_trajectories
+    attributes:
+      label: "Number of Trajectories"
+      placeholder: "e.g. 50000"
+
+  - type: input
+    id: total_hours
+    attributes:
+      label: "Total Hours"
+      placeholder: "e.g. 200"
+
+  - type: input
+    id: number_of_environments
+    attributes:
+      label: "Number of Environments"
+      placeholder: "e.g. 24"
+
+  - type: input
+    id: number_of_robot_types
+    attributes:
+      label: "Number of Robot Types"
+      placeholder: "e.g. 3"
+
+  - type: input
+    id: tags
+    attributes:
+      label: "Tags"
+      description: "쉼표로 구분. 입력하면 tags 전체를 교체 | Comma-separated; replaces the whole tag list"
+      placeholder: "e.g. large-scale, multi-robot, in-the-wild"
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: "Checklist"
+      options:
+        - label: "I selected the correct existing dataset above"
+          required: true
+        - label: "I filled in only the fields that need to change"
+          required: true

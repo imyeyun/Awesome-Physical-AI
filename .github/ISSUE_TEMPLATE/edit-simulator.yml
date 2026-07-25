@@ -1,0 +1,154 @@
+name: "Edit a Simulator / Tool"
+description: "Fix or update information for an already-listed simulator, engine, or benchmark"
+title: "[Edit Simulator] "
+labels: ["edit-simulator"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 시뮬레이터 / 툴 정보 수정 | Edit an Existing Simulator / Tool
+        등록된 툴의 잘못된 정보를 수정합니다. 이슈 등록 후 봇이 자동으로 PR을 생성합니다.
+
+        Fix incorrect information for a listed tool. A bot will create a PR automatically.
+
+  - type: dropdown
+    id: id
+    attributes:
+      label: "ID (slug)"
+      description: "수정할 툴을 선택하세요 | Select the tool you want to fix"
+      options:
+        # AUTOGEN:tools:start
+        - "mujoco — MuJoCo"
+        - "isaac-lab — Isaac Lab"
+        - "genesis — Genesis"
+        - "simplerenv — SimplerEnv"
+        - "robosuite — Robosuite"
+        - "robocasa — RoboCasa"
+        - "brax — Brax"
+        - "dm-control — dm_control"
+        - "sapien — SAPIEN"
+        - "isaac-sim — Isaac Sim"
+        - "mujoco-playground — MuJoCo Playground"
+        # AUTOGEN:tools:end
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: "Reason for edit"
+      description: "무엇이 왜 잘못되었는지 설명해 주세요 | Explain what is wrong and why"
+      placeholder: "e.g. It is categorised as a benchmark but is really a physics engine."
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ### 수정할 값 | Updated values
+
+        **바꾸려는 항목만** 채워 주세요. 비워 두거나 선택하지 않은 항목은 기존 값이 그대로 유지됩니다.
+
+        Fill in **only what should change** — anything left blank or unselected keeps its current value.
+
+  - type: input
+    id: name
+    attributes:
+      label: "Name"
+      placeholder: "Corrected official name"
+
+  - type: input
+    id: organization
+    attributes:
+      label: "Organization"
+      placeholder: "e.g. DeepMind"
+
+  - type: input
+    id: year
+    attributes:
+      label: "Year"
+      placeholder: "e.g. 2022"
+
+  - type: textarea
+    id: description_en
+    attributes:
+      label: "Description (English)"
+      placeholder: "Corrected 1-2 sentence description"
+
+  - type: textarea
+    id: description_ko
+    attributes:
+      label: "Description (Korean)"
+      placeholder: "수정된 1-2 문장 설명"
+
+  - type: input
+    id: github_url
+    attributes:
+      label: "GitHub URL"
+      placeholder: "https://github.com/org/repo"
+
+  - type: input
+    id: paper_url
+    attributes:
+      label: "Paper URL (arXiv)"
+      placeholder: "https://arxiv.org/abs/xxxx.xxxxx"
+
+  - type: input
+    id: project_url
+    attributes:
+      label: "Project / Docs URL"
+      placeholder: "https://my-simulator.readthedocs.io"
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: "Type"
+      description: "선택하지 않으면 기존 값 유지 | Leave unselected to keep the current type"
+      options:
+        - "physics_engine — 물리 엔진 (MuJoCo, Genesis 등)"
+        - "rl_framework — RL 학습 프레임워크 (Isaac Lab 등)"
+        - "benchmark — 벤치마크 / 평가 환경 (SimplerEnv, Robosuite 등)"
+        - "full_stack — 물리 + 학습 + 태스크 통합 (RoboCasa 등)"
+
+  - type: dropdown
+    id: gpu_accelerated
+    attributes:
+      label: "GPU-accelerated"
+      description: "선택하지 않으면 기존 값 유지 | Leave unselected to keep the current value"
+      options:
+        - "yes"
+        - "no"
+
+  - type: dropdown
+    id: ros_support
+    attributes:
+      label: "ROS2 support"
+      description: "선택하지 않으면 기존 값 유지 | Leave unselected to keep the current value"
+      options:
+        - "yes"
+        - "no"
+
+  - type: input
+    id: language
+    attributes:
+      label: "Primary Languages"
+      description: "쉼표로 구분. 입력하면 language 전체를 교체 | Comma-separated; replaces the whole list"
+      placeholder: "e.g. python, c++"
+
+  - type: input
+    id: tags
+    attributes:
+      label: "Tags"
+      description: "쉼표로 구분. 입력하면 tags 전체를 교체 | Comma-separated; replaces the whole tag list"
+      placeholder: "e.g. locomotion, manipulation, sim-to-real"
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: "Checklist"
+      options:
+        - label: "I selected the correct existing tool above"
+          required: true
+        - label: "I filled in only the fields that need to change"
+          required: true

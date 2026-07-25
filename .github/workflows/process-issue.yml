@@ -14,7 +14,10 @@ jobs:
     if: |
       contains(github.event.issue.labels.*.name, 'add-model') ||
       contains(github.event.issue.labels.*.name, 'add-dataset') ||
-      contains(github.event.issue.labels.*.name, 'add-simulator')
+      contains(github.event.issue.labels.*.name, 'add-simulator') ||
+      contains(github.event.issue.labels.*.name, 'edit-model') ||
+      contains(github.event.issue.labels.*.name, 'edit-dataset') ||
+      contains(github.event.issue.labels.*.name, 'edit-simulator')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,22 +31,28 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Determine entry type from label
+      - name: Determine entry type and action from label
         id: type
         run: |
           LABELS='${{ toJson(github.event.issue.labels.*.name) }}'
-          if echo "$LABELS" | grep -q "add-model"; then
+          if echo "$LABELS" | grep -qE '"(add|edit)-model"'; then
             echo "issue_type=model" >> $GITHUB_OUTPUT
-          elif echo "$LABELS" | grep -q "add-dataset"; then
+          elif echo "$LABELS" | grep -qE '"(add|edit)-dataset"'; then
             echo "issue_type=dataset" >> $GITHUB_OUTPUT
           else
             echo "issue_type=tool" >> $GITHUB_OUTPUT
           fi
+          if echo "$LABELS" | grep -q '"edit-'; then
+            echo "action=edit" >> $GITHUB_OUTPUT
+          else
+            echo "action=add" >> $GITHUB_OUTPUT
+          fi
 
-      - name: Parse issue and append entry
+      - name: Parse issue and apply entry
         env:
           ISSUE_BODY:   ${{ github.event.issue.body }}
           ISSUE_TYPE:   ${{ steps.type.outputs.issue_type }}
+          ISSUE_ACTION: ${{ steps.type.outputs.action }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -56,12 +65,21 @@ jobs:
       - name: Create branch and pull request
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACTION: ${{ steps.type.outputs.action }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
           ISSUE_AUTHOR_ID: ${{ github.event.issue.user.id }}
         run: |
-          BRANCH="add-entry/issue-${ISSUE_NUMBER}"
+          if [ "$ACTION" = "edit" ]; then
+            BRANCH="edit-entry/issue-${ISSUE_NUMBER}"
+            COMMIT_SUBJECT="fix: update entry from issue #${ISSUE_NUMBER}"
+            PR_TITLE="Update entry: ${ISSUE_TITLE}"
+          else
+            BRANCH="add-entry/issue-${ISSUE_NUMBER}"
+            COMMIT_SUBJECT="feat: add entry from issue #${ISSUE_NUMBER}"
+            PR_TITLE="Add entry: ${ISSUE_TITLE}"
+          fi
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$BRANCH"
@@ -69,14 +87,14 @@ jobs:
           # Credit the issue author via a Co-authored-by trailer so they are counted
           # as a contributor once the PR is merged (survives squash merges too).
           git commit \
-            -m "feat: add entry from issue #${ISSUE_NUMBER}" \
+            -m "$COMMIT_SUBJECT" \
             -m "Co-authored-by: ${ISSUE_AUTHOR} <${ISSUE_AUTHOR_ID}+${ISSUE_AUTHOR}@users.noreply.github.com>"
           git push --force origin "$BRANCH"
           PR_BODY=$(printf 'Resolves #%s\n\nAuto-generated from issue by @%s.\n\n**Please review the entry before merging.**' "${ISSUE_NUMBER}" "${ISSUE_AUTHOR}")
           EXISTING_PR=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number // empty')
           if [ -z "$EXISTING_PR" ]; then
             gh pr create \
-              --title "Add entry: ${ISSUE_TITLE}" \
+              --title "$PR_TITLE" \
               --body "$PR_BODY" \
               --head "$BRANCH" \
               --base main

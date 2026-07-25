@@ -186,6 +186,17 @@ To add a new entry, please open a GitHub Issue:
 - **[➕ Add a Dataset]({REPO_URL}/issues/new?template=add-dataset.yml)**
 - **[➕ Add a Simulator]({REPO_URL}/issues/new?template=add-simulator.yml)**
 
+이미 등록된 항목의 정보가 잘못되었다면 수정 이슈를 열어주세요.
+Found something wrong in an existing entry? Open an edit issue:
+
+- **[✏️ Edit a Model]({REPO_URL}/issues/new?template=edit-model.yml)**
+- **[✏️ Edit a Dataset]({REPO_URL}/issues/new?template=edit-dataset.yml)**
+- **[✏️ Edit a Simulator]({REPO_URL}/issues/new?template=edit-simulator.yml)**
+
+수정 폼에서는 목록에서 항목을 고른 뒤 **바꿀 값만** 채우면 됩니다. 비워 둔 항목은 기존 값이 유지됩니다.
+In an edit form, pick the entry from the list and fill in **only the values that should change** —
+anything left blank keeps its current value.
+
 이슈가 등록되면 봇이 자동으로 PR을 생성하고, 관리자가 검토 후 머지합니다.
 A bot will automatically create a PR from your issue for admin review.
 

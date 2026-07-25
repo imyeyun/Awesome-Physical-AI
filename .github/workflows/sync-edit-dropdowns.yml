@@ -1,0 +1,44 @@
+name: Sync Edit Dropdowns
+
+# Keeps the ID dropdowns in the edit-* issue forms in sync with data/*.yaml,
+# so contributors always pick from the current list of entries.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Sync dropdown options
+        run: python scripts/sync_edit_templates.py
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- .github/ISSUE_TEMPLATE; then
+            echo "Dropdowns already up to date — nothing to commit"
+            exit 0
+          fi
+          git add .github/ISSUE_TEMPLATE
+          git commit -m "chore: sync edit-form ID dropdowns with data/"
+          git push

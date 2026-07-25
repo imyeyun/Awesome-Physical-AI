@@ -7,7 +7,7 @@
 [![Datasets](https://img.shields.io/badge/Datasets-11-green)](https://pytorchkr.github.io/Awesome-Physical-AI)
 [![Simulators](https://img.shields.io/badge/Simulators-11-purple)](https://pytorchkr.github.io/Awesome-Physical-AI)
 [![Organizations](https://img.shields.io/badge/Organizations-31-orange)](https://pytorchkr.github.io/Awesome-Physical-AI)
-[![Updated](https://img.shields.io/badge/Updated-2026-07-19-lightgrey)](https://github.com/PyTorchKR/Awesome-Physical-AI)
+[![Updated](https://img.shields.io/badge/Updated-2026-07-25-lightgrey)](https://github.com/PyTorchKR/Awesome-Physical-AI)
 [![Dashboard](https://img.shields.io/badge/🌐_Dashboard-Live-brightgreen)](https://pytorchkr.github.io/Awesome-Physical-AI)
 
 > **[👉 인터랙티브 대시보드에서 필터링 및 시각화 보기 | View Interactive Dashboard](https://pytorchkr.github.io/Awesome-Physical-AI)**
@@ -95,6 +95,17 @@ To add a new entry, please open a GitHub Issue:
 - **[➕ Add a Model](https://github.com/PyTorchKR/Awesome-Physical-AI/issues/new?template=add-model.yml)**
 - **[➕ Add a Dataset](https://github.com/PyTorchKR/Awesome-Physical-AI/issues/new?template=add-dataset.yml)**
 - **[➕ Add a Simulator](https://github.com/PyTorchKR/Awesome-Physical-AI/issues/new?template=add-simulator.yml)**
+
+이미 등록된 항목의 정보가 잘못되었다면 수정 이슈를 열어주세요.
+Found something wrong in an existing entry? Open an edit issue:
+
+- **[✏️ Edit a Model](https://github.com/PyTorchKR/Awesome-Physical-AI/issues/new?template=edit-model.yml)**
+- **[✏️ Edit a Dataset](https://github.com/PyTorchKR/Awesome-Physical-AI/issues/new?template=edit-dataset.yml)**
+- **[✏️ Edit a Simulator](https://github.com/PyTorchKR/Awesome-Physical-AI/issues/new?template=edit-simulator.yml)**
+
+수정 폼에서는 목록에서 항목을 고른 뒤 **바꿀 값만** 채우면 됩니다. 비워 둔 항목은 기존 값이 유지됩니다.
+In an edit form, pick the entry from the list and fill in **only the values that should change** —
+anything left blank keeps its current value.
 
 이슈가 등록되면 봇이 자동으로 PR을 생성하고, 관리자가 검토 후 머지합니다.
 A bot will automatically create a PR from your issue for admin review.

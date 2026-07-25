@@ -160,6 +160,135 @@ def build_model_entry(form: dict) -> dict:
     }
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Partial-update builders (edit-* issues)
+#
+# An edit form only carries the fields the submitter wants to change, so these
+# builders emit a sparse dict: a key is present only when the form actually
+# supplied a value. Everything else — including 'stats', 'added_date' and 'id' —
+# is left untouched on the existing entry.
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _set_text(form: dict, updates: dict, entry_key: str, *form_keys: str) -> None:
+    """Take the first non-empty form field. Blank input leaves the field alone."""
+    for fk in form_keys:
+        value = form.get(fk, "").strip()
+        if value:
+            updates[entry_key] = value
+            return
+
+
+def _set_int(form: dict, updates: dict, entry_key: str, *form_keys: str) -> None:
+    for fk in form_keys:
+        value = form.get(fk, "").strip()
+        if value:
+            updates[entry_key] = to_int(value)
+            return
+
+
+def _set_bool(form: dict, updates: dict, entry_key: str, form_key: str) -> None:
+    """Read a yes/no dropdown. Leaving it unselected keeps the current value."""
+    value = form.get(form_key, "").strip().lower()
+    if value in ("yes", "true"):
+        updates[entry_key] = True
+    elif value in ("no", "false"):
+        updates[entry_key] = False
+
+
+def _set_group(form: dict, updates: dict, entry_key: str, form_key: str) -> None:
+    """Checkbox group: any box checked replaces the whole list, none keeps it.
+
+    Emptying a group is deliberately not offered — several of these are required
+    when an entry is first submitted, so clearing one would break the entry.
+    """
+    checked = parse_checkboxes(form.get(form_key, ""))
+    if checked:
+        updates[entry_key] = checked
+
+
+def _set_tags(form: dict, updates: dict) -> None:
+    raw = form.get("tags_optional", form.get("tags", "")).strip()
+    if raw:
+        updates["tags"] = parse_list(raw)
+
+
+def build_model_updates(form: dict) -> dict:
+    updates: dict = {}
+    _set_text(form, updates, "name", "name")
+    _set_text(form, updates, "org", "organization")
+    _set_text(form, updates, "description_en", "description_english", "description_en")
+    _set_text(form, updates, "description_ko", "description_korean", "description_ko")
+    _set_text(form, updates, "github_url", "github_url")
+    _set_text(form, updates, "paper_url", "paper_url_arxiv", "paper_url")
+    _set_text(form, updates, "hf_url", "huggingface_url")
+    _set_text(form, updates, "project_url", "project_page_url")
+    _set_int(form, updates, "year", "year")
+    _set_group(form, updates, "categories", "categories")
+    _set_group(form, updates, "hardware", "hardware_targets")
+    _set_group(form, updates, "learning", "learning_methods")
+    _set_group(form, updates, "framework", "framework")
+    _set_group(form, updates, "communication", "communication")
+    _set_tags(form, updates)
+    return updates
+
+
+def build_dataset_updates(form: dict) -> dict:
+    updates: dict = {}
+    _set_text(form, updates, "name", "name")
+    _set_text(form, updates, "org", "organization")
+    _set_text(form, updates, "description_en", "description_english", "description_en")
+    _set_text(form, updates, "description_ko", "description_korean", "description_ko")
+    _set_text(form, updates, "github_url", "github_url")
+    _set_text(form, updates, "paper_url", "paper_url_arxiv", "paper_url")
+    _set_text(form, updates, "hf_url", "huggingface_url")
+    _set_text(form, updates, "project_url", "project_page_url")
+    _set_int(form, updates, "year", "year")
+    _set_group(form, updates, "categories", "categories")
+    _set_group(form, updates, "hardware", "hardware_targets")
+    _set_group(form, updates, "source", "data_source")
+    _set_group(form, updates, "modality", "modality")
+
+    # 'scale' is nested — collect only the numbers that were filled in, so
+    # update_entry can merge them into the existing scale dict.
+    scale: dict = {}
+    _set_int(form, scale, "trajectories", "number_of_trajectories")
+    _set_int(form, scale, "hours", "total_hours", "total_hours_of_data")
+    _set_int(form, scale, "environments", "number_of_environments", "number_of_environments_/_tasks")
+    _set_int(form, scale, "robots", "number_of_robot_types")
+    if scale:
+        updates["scale"] = scale
+
+    _set_tags(form, updates)
+    return updates
+
+
+def build_tool_updates(form: dict) -> dict:
+    updates: dict = {}
+    _set_text(form, updates, "name", "name")
+    _set_text(form, updates, "org", "organization")
+    _set_text(form, updates, "description_en", "description_english", "description_en")
+    _set_text(form, updates, "description_ko", "description_korean", "description_ko")
+    _set_text(form, updates, "github_url", "github_url")
+    _set_text(form, updates, "paper_url", "paper_url_arxiv", "paper_url")
+    _set_text(form, updates, "project_url", "project_/_docs_url", "project_url")
+    _set_int(form, updates, "year", "year")
+
+    # The Type dropdown carries a description suffix — keep the value only
+    raw_type = form.get("type", "").strip()
+    if raw_type:
+        updates["type"] = re.split(r"\s+[—–-]\s+", raw_type.splitlines()[0])[0].strip()
+
+    _set_bool(form, updates, "gpu_accelerated", "gpu-accelerated")
+    _set_bool(form, updates, "ros_support", "ros2_support")
+
+    _set_text(form, updates, "_language_raw", "primary_languages", "primary_language_s")
+    if "_language_raw" in updates:
+        updates["language"] = parse_list(updates.pop("_language_raw"))
+
+    _set_tags(form, updates)
+    return updates
+
+
 def build_dataset_entry(form: dict) -> dict:
     return {
         "id": re.sub(r"[^a-z0-9-]", "", form.get("id_slug", form.get("id", "")).lower().replace(" ", "-")),
@@ -246,6 +375,53 @@ def append_entry(yaml_path: Path, entry: dict) -> None:
     print(f"✅ Appended '{entry['id']}' to {yaml_path.name}")
 
 
+def update_entry(yaml_path: Path, entry_id: str, updates: dict) -> None:
+    """Apply a partial update to the entry with the given id, preserving its other fields."""
+    with open(yaml_path, encoding="utf-8") as f:
+        entries = yaml.safe_load(f) or []
+
+    index = next((i for i, e in enumerate(entries) if e.get("id") == entry_id), None)
+    if index is None:
+        known = ", ".join(sorted(str(e.get("id", "")) for e in entries))
+        print(f"::error::No entry with id '{entry_id}' in {yaml_path.name}. Known ids: {known}")
+        sys.exit(1)
+
+    if not updates:
+        print("::error::The edit form did not contain any new values. "
+              "Fill in at least one field and edit the issue to retry.")
+        sys.exit(1)
+
+    # Only re-check the URLs this edit actually touches
+    broken, warned = [], []
+    for field in ("github_url", "paper_url", "hf_url", "project_url"):
+        url = updates.get(field, "")
+        if not url:
+            continue
+        valid, msg = check_url(url)
+        if not valid:
+            broken.append(field)
+        elif msg:
+            warned.append(msg)
+
+    for msg in warned:
+        print(f"::warning::{msg}")
+    if broken:
+        field_list = ", ".join(broken)
+        print(f"::error::The following URLs returned 404: {field_list}. Please fix the links and edit the issue to retry.")
+        sys.exit(1)
+
+    entry = entries[index]
+    for key, value in updates.items():
+        if isinstance(value, dict) and isinstance(entry.get(key), dict):
+            entry[key].update(value)  # merge nested dicts (e.g. 'scale') rather than replace
+        else:
+            entry[key] = value
+
+    with open(yaml_path, "w", encoding="utf-8") as f:
+        yaml.dump(entries, f, allow_unicode=True, sort_keys=False, default_flow_style=False)
+    print(f"✅ Updated '{entry_id}' in {yaml_path.name} — fields: {sorted(updates)}")
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Entry point
 # ─────────────────────────────────────────────────────────────────────────────
@@ -253,6 +429,7 @@ def append_entry(yaml_path: Path, entry: dict) -> None:
 def main() -> None:
     body = os.environ.get("ISSUE_BODY", "")
     issue_type = os.environ.get("ISSUE_TYPE", "").lower()
+    action = os.environ.get("ISSUE_ACTION", "add").lower()
     issue_number = os.environ.get("ISSUE_NUMBER", "?")
     author = os.environ.get("ISSUE_AUTHOR", "unknown")
 
@@ -267,15 +444,35 @@ def main() -> None:
     form = parse_form(body)
     print(f"Parsed form fields: {list(form.keys())}")
 
+    yaml_path = DATA_DIR / {
+        "model": "models.yaml",
+        "dataset": "datasets.yaml",
+        "tool": "tools.yaml",
+    }[issue_type]
+
+    if action == "edit":
+        # The dropdown value reads "<id> — <name>"; keep only the id
+        raw_id = re.split(r"\s+[—–-]\s+", form.get("id_slug", form.get("id", "")))[0]
+        entry_id = re.sub(r"[^a-z0-9-]", "", raw_id.strip().lower())
+        if not entry_id:
+            print("::error::Could not determine which entry to edit from the form")
+            sys.exit(1)
+
+        builder = {
+            "model": build_model_updates,
+            "dataset": build_dataset_updates,
+            "tool": build_tool_updates,
+        }[issue_type]
+        update_entry(yaml_path, entry_id, builder(form))
+        print(f"Entry '{entry_id}' edited by @{author} (issue #{issue_number})")
+        return
+
     if issue_type == "model":
         entry = build_model_entry(form)
-        yaml_path = DATA_DIR / "models.yaml"
     elif issue_type == "dataset":
         entry = build_dataset_entry(form)
-        yaml_path = DATA_DIR / "datasets.yaml"
     else:
         entry = build_tool_entry(form)
-        yaml_path = DATA_DIR / "tools.yaml"
 
     if not entry["id"]:
         print("::error::Could not determine entry 'id' from form")
