@@ -38,12 +38,15 @@
 ## 🔧 알려진 이슈 / 즉시 해결 필요
 
 - [x] `process-issue.yml` 동작을 위해 GitHub 레포에 라벨 `add-model`, `add-dataset` 수동 생성 필요
-- [ ] 차트 렌더링 수정 후 실제 GitHub Pages에서 동작 확인 필요
-- [ ] `process_issue.py`의 체크박스 파싱 로직 실제 이슈 폼으로 테스트 필요
+- [x] 차트 렌더링 수정 후 실제 GitHub Pages에서 동작 확인 필요
+- [x] `process_issue.py`의 체크박스 파싱 로직 실제 이슈 폼으로 테스트 필요
 - [x] 모델/데이터/시뮬레이터 추가해도 자동으로 PR 안 생기는 문제 해결
 - [x] 모델/데이터/시뮬레이터 추가 시 URL 검증 기능 추가
 - [x] HuggingFace Read 권한 토큰 추가해서 모델 정보 접근 불가 문제 해결
-- [x] roboagent 데이터셋 깃허브(코드) 링크 접속 불가 문제 해결 및 추후 링크 접속 불가 문제 발생 시 이슈 자동 생성 
+- [x] roboagent 데이터셋 깃허브(코드) 링크 접속 불가 문제 해결 및 추후 링크 접속 불가 문제 발생 시 이슈 자동 생성
+- [ ] 프론티어 모델 성능 정보 시각화
+- [ ] 모델/데이터셋/시뮬레이터 이슈를 만든 사람이 github 봇이 만든 PR의 공동 기여자로 자동 추가되기
+- [x] PyTorchKR 조직명 변경에 따른 수정
 
 
 ---
@@ -51,13 +54,13 @@
 ## 📋 TODO — 데이터 확충
 ## @ 심기택 -> 5/23(토) robot foundation model 세미나 (가안), 5/10(일) 모델/데이터/시뮬레이터 관련 조사 내용 공유
 - [ ] 모델 추가 (우선순위 높음) 
-  - [ ] RoboVLMs, CogACT, RoboMamba 등 2025년 신규 모델
+  - [x] RoboVLMs, CogACT, RoboMamba 등 2025년 신규 모델
   - [ ] Unitree / Fourier / Agility 등 하드웨어 업체 오픈소스
   - [ ] IsaacGym / MuJoCo Playground 등 시뮬레이터
 - [ ] 데이터셋 추가
   - [ ] AgiBot World (2025)
   - [ ] π-data (Physical Intelligence)
-  - [ ] BEHAVIOR-1K
+  - [x] BEHAVIOR-1K
 - [ ] 각 항목에 라이선스 정보 필드 추가 (`license: MIT / Apache-2.0 / CC-BY`)
 - [ ] 모델 파라미터 수 필드 추가 (`params: "7B"`)
 
@@ -76,9 +79,9 @@
 - [ ] GitHub 스타, 하드웨어 타겟, 학습 방식 등 비교 테이블
 
 ### C. 필터 URL 파라미터화 (난이도: 하) @강정민 5/10(일) html 코드 관련해서 조사한 내용 + 진행할 방향에 대한 공유
-- [ ] 필터 상태를 URL 쿼리스트링에 반영
-- [ ] 예: `?tab=models&category=manipulation&hardware=humanoid`
-- [ ] SNS·슬랙에서 특정 필터 결과를 바로 공유 가능
+- [x] 필터 상태를 URL 쿼리스트링에 반영
+- [x] 예: `?tab=models&category=manipulation&hardware=humanoid`
+- [x] SNS·슬랙에서 특정 필터 결과를 바로 공유 가능
 
 ### D. 월간 뉴스레터 자동 생성 (난이도: 중)
 - [ ] 매월 1일 GitHub Actions 실행
