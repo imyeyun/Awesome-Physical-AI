@@ -321,15 +321,46 @@ def test_render_actions_summary_contains_table():
     assert "unsupported tags: rl" in summary
 
 
-def test_build_prompt_contains_readable_korean_instructions():
+def test_generic_but_factually_correct_summary_is_reported():
+    result = vlm.normalize_validation_result(
+        {
+            "tag_score": 1.0,
+            "summary_score": 1.0,
+            "summary_specificity_score": 0.25,
+            "final_verdict": "warning",
+            "reason": "요약이 사실과 일치하지만 모델 고유의 핵심 아이디어가 드러나지 않습니다.",
+            "unsupported_tags": [],
+            "unsupported_claims": [],
+            "generic_summary_issues": [
+                "의도 우회 방지를 위한 잠재 병목 설계가 빠져 있습니다."
+            ],
+        }
+    )
+
+    report = {
+        "status": "completed",
+        "skipped_reason": None,
+        "counts": {"pass": 0, "warning": 1, "fail": 0},
+        "results": [{"entry_id": "dial", "entry_type": "model", **result, "evidence_issues": []}],
+    }
+
+    summary = vlm.render_actions_summary(report)
+
+    assert result["summary_specificity_score"] == 0.25
+    assert "Specificity" in summary
+    assert "generic summary: 의도 우회 방지를 위한 잠재 병목 설계가 빠져 있습니다." in summary
+
+
+def test_build_prompt_includes_specificity_review_instructions():
     prompt = vlm.build_prompt(
         "model",
         _entry(description_ko="조작 정책 요약입니다."),
         vlm.EvidenceBundle(readme_text="README evidence", abstract_text="Abstract evidence"),
     )
 
-    assert "메타데이터를 검증하는 엄격한 검수자입니다." in prompt
-    assert "reason은 반드시 한국어로 작성하세요." in prompt
-    assert "README evidence:" in prompt
-    assert "Abstract evidence:" in prompt
+    assert "사실과 일치해도 지나치게 일반적일 수 있습니다." in prompt
+    assert "generic_summary_issues" in prompt
+    assert "의도 우회(shortcut)를 차단" in prompt
+    assert "README 근거:" in prompt
+    assert "Abstract 근거:" in prompt
     
