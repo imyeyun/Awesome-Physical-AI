@@ -2,8 +2,8 @@
 """
 LLM-based validation for submitted tags and summaries.
 
-This script compares repository metadata against README and paper abstract
-evidence, asks Gemini for a structured JSON verdict, then writes a report
+This script compares repository metadata against README, paper abstract, and
+paper introduction evidence, asks Gemini for a structured JSON verdict, then writes a report
 consumable by pytest and GitHub Actions.
 
 Usage:
@@ -74,6 +74,7 @@ VALIDATION_SCHEMA: dict[str, Any] = {
 class EvidenceBundle:
     readme_text: str = ""
     abstract_text: str = ""
+    introduction_text: str = ""
     issues: list[str] = field(default_factory=list)
 
 
@@ -168,11 +169,17 @@ class EvidenceFetcher:
                 bundle.abstract_text = self.fetch_paper_abstract(paper_url)
             except Exception as exc:  # pragma: no cover - network behavior
                 bundle.issues.append(f"Abstract fetch failed: {exc}")
+            try:
+                bundle.introduction_text = self.fetch_paper_introduction(paper_url)
+            except Exception as exc:  # pragma: no cover - network behavior
+                bundle.issues.append(f"Introduction fetch failed: {exc}")
         else:
             bundle.issues.append("Abstract evidence unavailable: missing paper_url")
+            bundle.issues.append("Introduction evidence unavailable: missing paper_url")
 
         bundle.readme_text = truncate_text(bundle.readme_text)
         bundle.abstract_text = truncate_text(bundle.abstract_text)
+        bundle.introduction_text = truncate_text(bundle.introduction_text)
         return bundle
 
     def fetch_github_readme(self, owner: str, repo: str) -> str:
@@ -199,6 +206,18 @@ class EvidenceFetcher:
         response.raise_for_status()
         return response.text
 
+    def fetch_paper_introduction(self, paper_url: str) -> str:
+        """Fetch the paper's Introduction section for evidence-bound review."""
+        if "arxiv.org" in paper_url:
+            return self.fetch_arxiv_introduction(paper_url)
+        response = self.session.get(
+            paper_url,
+            headers={"User-Agent": "awesome-physical-ai-validator"},
+            timeout=REQUEST_TIMEOUT_SECONDS,
+        )
+        response.raise_for_status()
+        return self.extract_introduction(response.text)
+
     def fetch_arxiv_abstract(self, paper_url: str) -> str:
         response = self.session.get(
             paper_url,
@@ -221,6 +240,36 @@ class EvidenceFetcher:
         if not match:
             raise ValueError("could not find abstract in paper page")
         return sanitize_text(match.group(1))
+
+    def fetch_arxiv_introduction(self, paper_url: str) -> str:
+        match = re.search(r"arxiv\.org/(?:abs|html|pdf)/([^?#]+)", paper_url)
+        if not match:
+            raise ValueError("could not determine arXiv paper identifier")
+        paper_id = match.group(1).removesuffix(".pdf")
+        response = self.session.get(
+            f"https://arxiv.org/html/{paper_id}",
+            headers={"User-Agent": "awesome-physical-ai-validator"},
+            timeout=REQUEST_TIMEOUT_SECONDS,
+        )
+        response.raise_for_status()
+        return self.extract_introduction(response.text)
+
+    @staticmethod
+    def extract_introduction(html: str) -> str:
+        """Extract text from the first HTML heading named Introduction."""
+        headings = list(
+            re.finditer(r"<h([1-6])[^>]*>(.*?)</h\1>", html, flags=re.IGNORECASE | re.DOTALL)
+        )
+        for index, heading in enumerate(headings):
+            title = sanitize_text(heading.group(2))
+            title = re.sub(r"^\d+(?:\.\d+)*\s*", "", title).strip().lower()
+            if title not in {"introduction", "intro"}:
+                continue
+            end = headings[index + 1].start() if index + 1 < len(headings) else len(html)
+            introduction = sanitize_text(html[heading.end() : end])
+            if introduction:
+                return introduction
+        raise ValueError("could not find Introduction section in paper page")
 
 
 class GeminiValidator:
@@ -398,7 +447,7 @@ def build_prompt(entry_type: str, entry: dict[str, Any], evidence: EvidenceBundl
     return f"""
 당신은 Awesome Physical AI 저장소에 등록된 항목의 메타데이터를 검증하는 엄격한 검수자입니다.
 
-제출된 태그와 영어/한국어 요약문을 제공된 GitHub README 및 논문 Abstract 근거만으로 검증하세요. 일반 지식이나 추측은 사용하지 마세요.
+제출된 태그와 영어/한국어 요약문을 제공된 GitHub README, 논문 Abstract, 논문 Introduction 근거만으로 검증하세요. 일반 지식이나 추측은 사용하지 마세요.
 
 검증 기준:
 1. 근거로 뒷받침되지 않는 태그는 모두 unsupported_tags에 넣으세요.
@@ -415,7 +464,7 @@ def build_prompt(entry_type: str, entry: dict[str, Any], evidence: EvidenceBundl
 판단 예시:
 - 일반적인 요약문: "이중 시스템 VLA 구조에서 고수준 의도와 저수준 행동을 분리하고, VLM과 flow-matching 기반 정책을 사용한다." 이 설명은 사실일 수 있지만 많은 VLA 프로젝트에 적용될 수 있으므로, 해당 항목만의 기여를 보여 주지 못하면 warning과 generic_summary_issues 대상입니다.
 - 고유한 요약문: "행동이 잠재 의도를 반드시 통과하도록 병목을 설계해 기존 이중 시스템 VLA의 의도 우회(shortcut)를 차단하고, 행동 그래디언트가 VLM을 정교화하도록 한다." 이처럼 제안한 구조적 장치와 해결하려는 문제를 근거에 맞게 설명하면 충분히 구체적입니다.
-- 위 예시는 판단 방식만 보여 주며, 실제 항목을 검증할 때는 반드시 해당 항목에 제공된 README와 Abstract 근거만 사용하세요.
+- 위 예시는 판단 방식만 보여 주며, 실제 항목을 검증할 때는 반드시 해당 항목에 제공된 README, Abstract, Introduction 근거만 사용하세요.
 
 반환 JSON 스키마:
 {json.dumps(VALIDATION_SCHEMA, ensure_ascii=False)}
@@ -433,6 +482,9 @@ README 근거:
 
 Abstract 근거:
 {evidence.abstract_text or "(missing)"}
+
+Introduction 근거:
+{evidence.introduction_text or "(missing)"}
 """.strip()
 
 
@@ -448,6 +500,8 @@ def validate_entry(
         evidence_sources.append("README")
     if evidence.abstract_text:
         evidence_sources.append("Abstract")
+    if evidence.introduction_text:
+        evidence_sources.append("Introduction")
 
     try:
         llm_result = validator.validate(entry_type, entry, evidence)

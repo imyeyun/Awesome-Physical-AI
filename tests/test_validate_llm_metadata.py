@@ -61,6 +61,7 @@ def test_validate_entry_pass_case():
             "test-entry": vlm.EvidenceBundle(
                 readme_text="README says the project uses PyTorch for manipulation.",
                 abstract_text="The paper studies manipulation with an imitation learning policy.",
+                introduction_text="The introduction explains the paper's manipulation setting.",
             )
         }
     )
@@ -80,7 +81,7 @@ def test_validate_entry_pass_case():
     result = vlm.validate_entry("model", _entry(), fetcher, validator)
 
     assert result.final_verdict == "pass"
-    assert result.evidence_sources == ["README", "Abstract"]
+    assert result.evidence_sources == ["README", "Abstract", "Introduction"]
 
 
 def test_validate_entry_invalid_tag_case():
@@ -355,7 +356,11 @@ def test_build_prompt_includes_specificity_review_instructions():
     prompt = vlm.build_prompt(
         "model",
         _entry(description_ko="조작 정책 요약입니다."),
-        vlm.EvidenceBundle(readme_text="README evidence", abstract_text="Abstract evidence"),
+        vlm.EvidenceBundle(
+            readme_text="README evidence",
+            abstract_text="Abstract evidence",
+            introduction_text="Introduction evidence",
+        ),
     )
 
     assert "사실과 일치해도 지나치게 일반적일 수 있습니다." in prompt
@@ -363,4 +368,19 @@ def test_build_prompt_includes_specificity_review_instructions():
     assert "의도 우회(shortcut)를 차단" in prompt
     assert "README 근거:" in prompt
     assert "Abstract 근거:" in prompt
+    assert "Introduction 근거:" in prompt
+    assert "Introduction evidence" in prompt
+
+
+def test_extract_introduction_returns_first_introduction_section():
+    html = """
+    <h2><span>1 </span>Introduction</h2>
+    <p>This paper introduces a policy for robot manipulation.</p>
+    <h2>2 Method</h2>
+    <p>Method details.</p>
+    """
+
+    introduction = vlm.EvidenceFetcher.extract_introduction(html)
+
+    assert introduction == "This paper introduces a policy for robot manipulation."
     
