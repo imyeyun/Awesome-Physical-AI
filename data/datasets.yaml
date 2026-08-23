@@ -27,9 +27,9 @@
     environments: 527
     robots: 22
   stats:
-    github_stars: 1982
-    hf_downloads: 25184
-    last_updated: '2026-08-16'
+    github_stars: 1994
+    hf_downloads: 24778
+    last_updated: '2026-08-23'
     github_forks: 120
   added_date: '2023-10-13'
   tags:
@@ -66,10 +66,10 @@
     environments: 564
     robots: 1
   stats:
-    github_stars: 394
+    github_stars: 428
     hf_downloads: 0
-    last_updated: '2026-08-16'
-    github_forks: 87
+    last_updated: '2026-08-23'
+    github_forks: 93
   added_date: '2024-03-19'
   tags:
   - in-the-wild
@@ -105,7 +105,7 @@
   stats:
     github_stars: 288
     hf_downloads: 0
-    last_updated: '2026-08-16'
+    last_updated: '2026-08-23'
     github_forks: 36
   added_date: '2023-08-24'
   tags:
@@ -147,7 +147,7 @@
   stats:
     github_stars: 111
     hf_downloads: 0
-    last_updated: '2026-08-16'
+    last_updated: '2026-08-23'
     github_forks: 14
   added_date: '2023-07-02'
   tags:
@@ -181,10 +181,10 @@
     environments: 4
     robots: 1
   stats:
-    github_stars: 2193
+    github_stars: 2221
     hf_downloads: 0
-    last_updated: '2026-08-16'
-    github_forks: 457
+    last_updated: '2026-08-23'
+    github_forks: 460
   added_date: '2023-06-05'
   tags:
   - benchmark
@@ -220,9 +220,9 @@
     environments: 20
     robots: 8
   stats:
-    github_stars: 3226
-    hf_downloads: 123
-    last_updated: '2026-08-16'
+    github_stars: 3254
+    hf_downloads: 125
+    last_updated: '2026-08-23'
     github_forks: 535
   added_date: '2023-02-09'
   tags:
@@ -260,7 +260,7 @@
   stats:
     github_stars: 362
     hf_downloads: 0
-    last_updated: '2026-08-16'
+    last_updated: '2026-08-23'
     github_forks: 30
   added_date: '2022-10-04'
   tags:
@@ -297,9 +297,9 @@
     environments: 27
     robots: 1
   stats:
-    github_stars: 783
+    github_stars: 785
     hf_downloads: 0
-    last_updated: '2026-08-16'
+    last_updated: '2026-08-23'
     github_forks: 126
   added_date: '2024-03-15'
   tags:
@@ -332,10 +332,10 @@
     environments: 50
     robots: 1
   stats:
-    github_stars: 1866
+    github_stars: 1869
     hf_downloads: 0
-    last_updated: '2026-08-16'
-    github_forks: 349
+    last_updated: '2026-08-23'
+    github_forks: 350
   added_date: '2019-10-23'
   tags:
   - benchmark
@@ -372,7 +372,7 @@
   stats:
     github_stars: 390
     hf_downloads: 0
-    last_updated: '2026-08-16'
+    last_updated: '2026-08-23'
   added_date: '2023-09-05'
   tags:
   - semantic-augmentation
