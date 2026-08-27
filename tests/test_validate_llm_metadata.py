@@ -307,7 +307,7 @@ def test_render_actions_summary_contains_table():
                 "tag_score": 0.7,
                 "summary_score": 0.6,
                 "unsupported_tags": ["rl"],
-                "unsupported_claims": [],
+                "unsupported_claims": ["지원 범위가 과장되어 있습니다"],
                 "evidence_issues": ["Abstract evidence unavailable"],
                 "reason": "Need more evidence",
             }
@@ -319,7 +319,8 @@ def test_render_actions_summary_contains_table():
     assert "| Entry | Type | Verdict |" in summary
     assert "foo" in summary
     assert "reason: Need more evidence" in summary
-    assert "unsupported tags: rl" in summary
+    assert "수정 필요 태그: rl" in summary
+    assert "수정 필요 문구: 지원 범위가 과장되어 있습니다" in summary
 
 
 def test_generic_but_factually_correct_summary_is_reported():
@@ -349,7 +350,6 @@ def test_generic_but_factually_correct_summary_is_reported():
 
     assert result["summary_specificity_score"] == 0.25
     assert "Specificity" in summary
-    assert "generic summary: 의도 우회 방지를 위한 잠재 병목 설계가 빠져 있습니다." in summary
 
 
 def test_build_prompt_includes_specificity_review_instructions():

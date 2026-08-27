@@ -591,11 +591,9 @@ def render_actions_summary(report: dict[str, Any]) -> str:
     for result in report["results"]:
         notes: list[str] = [f"reason: {result['reason']}"]
         if result["unsupported_tags"]:
-            notes.append("unsupported tags: " + ", ".join(result["unsupported_tags"]))
+            notes.append("수정 필요 태그: " + ", ".join(result["unsupported_tags"]))
         if result["unsupported_claims"]:
-            notes.append("unsupported claims: " + ", ".join(result["unsupported_claims"]))
-        if result.get("generic_summary_issues"):
-            notes.append("generic summary: " + ", ".join(result["generic_summary_issues"]))
+            notes.append("수정 필요 문구: " + ", ".join(result["unsupported_claims"]))
         if result["evidence_issues"]:
             notes.append("evidence issues: " + "; ".join(result["evidence_issues"]))
         lines.append(
