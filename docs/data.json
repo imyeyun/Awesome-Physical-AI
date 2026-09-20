@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "last_updated": "2026-09-13",
+    "last_updated": "2026-09-20",
     "total_models": 12,
     "total_datasets": 10,
     "total_tools": 9,
@@ -34,10 +34,10 @@
       ],
       "communication": [],
       "stats": {
-        "github_stars": 27436,
-        "github_forks": 5638,
+        "github_stars": 27637,
+        "github_forks": 5687,
         "hf_downloads": 0,
-        "last_updated": "2026-09-13"
+        "last_updated": "2026-09-20"
       },
       "added_date": "2024-06-01",
       "tags": [
@@ -75,10 +75,10 @@
       ],
       "communication": [],
       "stats": {
-        "github_stars": 13779,
-        "github_forks": 2447,
+        "github_stars": 13902,
+        "github_forks": 2474,
         "hf_downloads": 0,
-        "last_updated": "2026-09-13"
+        "last_updated": "2026-09-20"
       },
       "added_date": "2024-10-31",
       "tags": [
@@ -113,10 +113,10 @@
       ],
       "communication": [],
       "stats": {
-        "github_stars": 6999,
-        "github_forks": 843,
-        "hf_downloads": 442776,
-        "last_updated": "2026-09-13"
+        "github_stars": 7049,
+        "github_forks": 847,
+        "hf_downloads": 435128,
+        "last_updated": "2026-09-20"
       },
       "added_date": "2024-06-13",
       "tags": [
@@ -152,10 +152,10 @@
       ],
       "communication": [],
       "stats": {
-        "github_stars": 1771,
+        "github_stars": 1782,
         "github_forks": 282,
-        "hf_downloads": 115,
-        "last_updated": "2026-09-13"
+        "hf_downloads": 112,
+        "last_updated": "2026-09-20"
       },
       "added_date": "2023-10-01",
       "tags": [
@@ -192,10 +192,10 @@
         "ros2"
       ],
       "stats": {
-        "github_stars": 2219,
-        "github_forks": 419,
+        "github_stars": 2234,
+        "github_forks": 422,
         "hf_downloads": 0,
-        "last_updated": "2026-09-13"
+        "last_updated": "2026-09-20"
       },
       "added_date": "2023-04-01",
       "tags": [
@@ -231,10 +231,10 @@
       ],
       "communication": [],
       "stats": {
-        "github_stars": 4536,
-        "github_forks": 834,
+        "github_stars": 4570,
+        "github_forks": 839,
         "hf_downloads": 0,
-        "last_updated": "2026-09-13"
+        "last_updated": "2026-09-20"
       },
       "added_date": "2023-03-07",
       "tags": [
@@ -273,10 +273,10 @@
         "ros2"
       ],
       "stats": {
-        "github_stars": 4469,
+        "github_stars": 4476,
         "github_forks": 733,
         "hf_downloads": 0,
-        "last_updated": "2026-09-13"
+        "last_updated": "2026-09-20"
       },
       "added_date": "2024-01-04",
       "tags": [
@@ -313,10 +313,10 @@
         "ros2"
       ],
       "stats": {
-        "github_stars": 850,
+        "github_stars": 852,
         "github_forks": 121,
         "hf_downloads": 0,
-        "last_updated": "2026-09-13"
+        "last_updated": "2026-09-20"
       },
       "added_date": "2024-06-14",
       "tags": [
@@ -354,10 +354,10 @@
         "ros2"
       ],
       "stats": {
-        "github_stars": 8053,
-        "github_forks": 1453,
-        "hf_downloads": 414,
-        "last_updated": "2026-09-13"
+        "github_stars": 8092,
+        "github_forks": 1461,
+        "hf_downloads": 458,
+        "last_updated": "2026-09-20"
       },
       "added_date": "2025-03-19",
       "tags": [
@@ -395,7 +395,7 @@
         "github_stars": 437,
         "github_forks": 36,
         "hf_downloads": 0,
-        "last_updated": "2026-09-13"
+        "last_updated": "2026-09-20"
       },
       "added_date": "2023-11-02",
       "tags": [
@@ -433,7 +433,7 @@
         "github_stars": 309,
         "github_forks": 15,
         "hf_downloads": 0,
-        "last_updated": "2026-09-13"
+        "last_updated": "2026-09-20"
       },
       "added_date": "2024-01-01",
       "tags": [
@@ -471,8 +471,8 @@
       "stats": {
         "github_stars": 282,
         "github_forks": 37,
-        "hf_downloads": 29,
-        "last_updated": "2026-09-13"
+        "hf_downloads": 35,
+        "last_updated": "2026-09-20"
       },
       "added_date": "2024-08-21",
       "tags": [
@@ -517,10 +517,10 @@
         "robots": 22
       },
       "stats": {
-        "github_stars": 2030,
-        "hf_downloads": 13868,
-        "last_updated": "2026-09-13",
-        "github_forks": 127
+        "github_stars": 2043,
+        "hf_downloads": 19582,
+        "last_updated": "2026-09-20",
+        "github_forks": 130
       },
       "added_date": "2023-10-13",
       "tags": [
@@ -563,10 +563,10 @@
         "robots": 1
       },
       "stats": {
-        "github_stars": 440,
+        "github_stars": 443,
         "hf_downloads": 0,
-        "last_updated": "2026-09-13",
-        "github_forks": 97
+        "last_updated": "2026-09-20",
+        "github_forks": 98
       },
       "added_date": "2024-03-19",
       "tags": [
@@ -610,7 +610,7 @@
       "stats": {
         "github_stars": 291,
         "hf_downloads": 0,
-        "last_updated": "2026-09-13",
+        "last_updated": "2026-09-20",
         "github_forks": 35
       },
       "added_date": "2023-08-24",
@@ -659,7 +659,7 @@
       "stats": {
         "github_stars": 114,
         "hf_downloads": 0,
-        "last_updated": "2026-09-13",
+        "last_updated": "2026-09-20",
         "github_forks": 15
       },
       "added_date": "2023-07-02",
@@ -701,10 +701,10 @@
         "robots": 1
       },
       "stats": {
-        "github_stars": 2308,
+        "github_stars": 2329,
         "hf_downloads": 0,
-        "last_updated": "2026-09-13",
-        "github_forks": 486
+        "last_updated": "2026-09-20",
+        "github_forks": 496
       },
       "added_date": "2023-06-05",
       "tags": [
@@ -747,10 +747,10 @@
         "robots": 8
       },
       "stats": {
-        "github_stars": 3313,
-        "hf_downloads": 238,
-        "last_updated": "2026-09-13",
-        "github_forks": 541
+        "github_stars": 3341,
+        "hf_downloads": 235,
+        "last_updated": "2026-09-20",
+        "github_forks": 543
       },
       "added_date": "2023-02-09",
       "tags": [
@@ -793,9 +793,9 @@
         "robots": 1
       },
       "stats": {
-        "github_stars": 363,
+        "github_stars": 364,
         "hf_downloads": 0,
-        "last_updated": "2026-09-13",
+        "last_updated": "2026-09-20",
         "github_forks": 30
       },
       "added_date": "2022-10-04",
@@ -841,7 +841,7 @@
       "stats": {
         "github_stars": 788,
         "hf_downloads": 0,
-        "last_updated": "2026-09-13",
+        "last_updated": "2026-09-20",
         "github_forks": 128
       },
       "added_date": "2024-03-15",
@@ -882,10 +882,10 @@
         "robots": 1
       },
       "stats": {
-        "github_stars": 1880,
+        "github_stars": 1883,
         "hf_downloads": 0,
-        "last_updated": "2026-09-13",
-        "github_forks": 352
+        "last_updated": "2026-09-20",
+        "github_forks": 353
       },
       "added_date": "2019-10-23",
       "tags": [
@@ -929,7 +929,7 @@
       "stats": {
         "github_stars": 390,
         "hf_downloads": 0,
-        "last_updated": "2026-09-13"
+        "last_updated": "2026-09-20"
       },
       "added_date": "2023-09-05",
       "tags": [
@@ -959,8 +959,8 @@
         "c++"
       ],
       "stats": {
-        "github_stars": 15092,
-        "last_updated": "2026-09-13"
+        "github_stars": 15234,
+        "last_updated": "2026-09-20"
       },
       "added_date": "2022-10-18",
       "tags": [
@@ -988,8 +988,8 @@
         "python"
       ],
       "stats": {
-        "github_stars": 8112,
-        "last_updated": "2026-09-13"
+        "github_stars": 8173,
+        "last_updated": "2026-09-20"
       },
       "added_date": "2023-05-01",
       "tags": [
@@ -1017,8 +1017,8 @@
         "python"
       ],
       "stats": {
-        "github_stars": 29934,
-        "last_updated": "2026-09-13"
+        "github_stars": 29969,
+        "last_updated": "2026-09-20"
       },
       "added_date": "2024-12-01",
       "tags": [
@@ -1045,8 +1045,8 @@
         "python"
       ],
       "stats": {
-        "github_stars": 1162,
-        "last_updated": "2026-09-13"
+        "github_stars": 1167,
+        "last_updated": "2026-09-20"
       },
       "added_date": "2024-05-09",
       "tags": [
@@ -1074,8 +1074,8 @@
         "python"
       ],
       "stats": {
-        "github_stars": 2610,
-        "last_updated": "2026-09-13"
+        "github_stars": 2621,
+        "last_updated": "2026-09-20"
       },
       "added_date": "2020-09-25",
       "tags": [
@@ -1102,8 +1102,8 @@
         "python"
       ],
       "stats": {
-        "github_stars": 1721,
-        "last_updated": "2026-09-13"
+        "github_stars": 1741,
+        "last_updated": "2026-09-20"
       },
       "added_date": "2024-06-04",
       "tags": [
@@ -1130,8 +1130,8 @@
         "python"
       ],
       "stats": {
-        "github_stars": 3229,
-        "last_updated": "2026-09-13"
+        "github_stars": 3237,
+        "last_updated": "2026-09-20"
       },
       "added_date": "2021-06-25",
       "tags": [
@@ -1159,8 +1159,8 @@
         "python"
       ],
       "stats": {
-        "github_stars": 4689,
-        "last_updated": "2026-09-13"
+        "github_stars": 4700,
+        "last_updated": "2026-09-20"
       },
       "added_date": "2018-01-01",
       "tags": [
@@ -1188,8 +1188,8 @@
         "c++"
       ],
       "stats": {
-        "github_stars": 832,
-        "last_updated": "2026-09-13"
+        "github_stars": 840,
+        "last_updated": "2026-09-20"
       },
       "added_date": "2020-03-18",
       "tags": [
